@@ -37,7 +37,7 @@ type ErrorCallback = (error: Error) => void;
 const ERROR_CALLBACKS = new Set<ErrorCallback>();
 
 /**
- * Register an error callback listener to import.js. If an error happens during
+ * Register an error callback listener to esquirejs. If an error happens during
  * a dynamic import, the error callback will be called with the error object.
  * If no error listeners are registered, errors will be left uncaught.
  *
@@ -205,7 +205,7 @@ const loadFromPlugin = (moduleName: string): unknown | Promise<unknown> => {
     const frozenOptions = Object.freeze(Object.assign({}, importJSOptions));
     if (typeof prefix === "string" && !hasPluginByName(prefix)) {
         if (!hasModule(prefix)) {
-            throw new Error(`Unknown import.js plugin '${prefix}'`);
+            throw new Error(`Unknown esquirejs plugin '${prefix}'`);
         }
         // A plugin has been provided asynchronously, load and define it
         // before starting the module load
@@ -259,7 +259,7 @@ export const load = async (
 
 //     const [prefix, nameToNormalize] = decomposeModuleName(name);
 //     if (typeof prefix === "string" && !hasPluginByName(prefix)) {
-//         throw new Error(`Unknown import.js plugin ${prefix}`);
+//         throw new Error(`Unknown esquirejs plugin ${prefix}`);
 //     }
 
 //     // Found corresponding plugin
