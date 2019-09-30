@@ -40,7 +40,7 @@ const SPECIAL_DEPENDENCY_KEYS = [
 
 // Monster of a regular expression that understands synchronous and asynchronous
 // JavaScript functions, both normal and arrow functions (with or without parentheses)
-const PARAMETERS_REGEX = /^(?:async\s+)?function(?:\s*(?:\w*)?)?\(([^)]*)\)\s*{|^(?:async\s*)?\(([^)]+)\)\s*=>|^(?:async\s+)?(\w+)\s*=>/;
+const PARAMETERS_REGEX = /^(?:async\s+)?(?:function(?:\s+\w+)?\s*\(([^)]*)\)\s*{|(?:\(([^)]*)\)|(\w+))\s*=>)/;
 
 const parseFunctionParameters = (func: Function) => {
     const funcString = func.toString();
