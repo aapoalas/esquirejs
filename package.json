@@ -1,0 +1,33 @@
+{
+    "name": "esquirejs",
+    "version": "0.8.0",
+    "description": "An ECMAScript file and module loader for the modern period.",
+    "keywords": [
+        "esm",
+        "amd",
+        "requirejs"
+    ],
+    "homepage": "https://github.com/aapoalas/esquirejs",
+    "bugs": {
+        "email": "aapo.alasuutari@valmet.com",
+        "url": "https://github.com/aapoalas/esquirejs/issues"
+    },
+    "license": "GPL-3.0",
+    "author": {
+        "name": "Aapo Alasuutari",
+        "email": "aapo.alasuutari@valmet.com",
+        "url": "https://github.com/aapoalas"
+    },
+    "main": "dist/index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aapoalas/esquirejs.git"
+    },
+    "scripts": {
+        "build-test": "echo TODO",
+        "test": "echo TODO"
+    },
+    "private": true,
+    "sideEffects": false,
+    "devDependencies": {}
+}
