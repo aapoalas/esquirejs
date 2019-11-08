@@ -5,7 +5,11 @@
 import { ImportJSOptions } from "../options";
 import { LoadFunction } from "../plugins";
 
-type CORS = undefined | "anonymous" | "use-credentials" | "";
+export const enum CORS {
+	"Same Origin" = "anonymous",
+	"Include" = "use-credentials",
+	"Empty String Same Origin" = "",
+};
 
 const isJSONURL = (url: string): boolean => url.endsWith(".json");
 
@@ -15,7 +19,7 @@ const isHTMLTextURL = (url: string): boolean =>
 const HEAD_EL = document.getElementsByTagName("head")[0];
 const LISTENER_OPTIONS = { once: true };
 
-let crossOrigin: CORS = "anonymous";
+let crossOrigin: CORS = CORS["Same Origin"];
 
 export const load = async (
     url: string,
@@ -28,7 +32,7 @@ export const load = async (
         return loadAsync(`text${options.separator}${url}`);
     }
     return new Promise((res, rej) => {
-        const script = document.createElement("script");
+		const script = document.createElement("script");
         script.crossOrigin = crossOrigin;
         script.src = url;
         script.type = "module";

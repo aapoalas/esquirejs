@@ -2,7 +2,7 @@
  * Original Work Copyright 2019 Valmet Automation Inc.
  */
 
-import tape from "tape";
+import * as tape from "tape";
 import { define } from "../../src/define";
 
 tape("Define function", ({ test }) => {

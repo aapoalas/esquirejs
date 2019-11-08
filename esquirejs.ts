@@ -23,19 +23,22 @@ import {
 } from "./src/load";
 import { defineBasePlugin, definePlugin } from "./src/plugins";
 
-// Define base plugin and the json! and text! plugins
-// that it indirectly depends on.
-defineBasePlugin(scriptBase);
-definePlugin("json", json);
-definePlugin("text", text);
-
-// Define RequireJS-like globals
 declare global {
     interface Window {
         define: typeof define;
         require: typeof legacyRequire;
     }
 }
-window.define = define;
-// @ts-ignore TypeScript does not want anyone touching the require function
-window.require = legacyRequire;
+
+export const setup = () => {
+  // Define base plugin and the json! and text! plugins
+  // that it indirectly depends on.
+  defineBasePlugin(scriptBase);
+  definePlugin("json", json);
+  definePlugin("text", text);
+  
+  // Define RequireJS-like globals
+  window.define = define;
+  // @ts-ignore TypeScript does not want anyone touching the require function
+  window.require = legacyRequire;
+}
