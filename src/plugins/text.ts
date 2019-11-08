@@ -5,6 +5,8 @@
 import { ImportJSOptions } from "../options";
 import { LoadFunction } from "../plugins";
 
+let fetchOptions: undefined | RequestInit;
+
 export const load = async (
     url: string,
     loadAsync: LoadFunction,
@@ -22,6 +24,10 @@ export const load = async (
             }${url.substring(lastSeparatorIndex + 1)}`
         );
     }
-    const response = await fetch(url);
+    const response = await fetch(url, fetchOptions);
     return response.text();
 };
+
+export const setOptions = (options: RequestInit) => {
+    fetchOptions = options;
+}

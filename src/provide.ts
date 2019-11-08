@@ -9,7 +9,7 @@
  * 2. Built AMD modules. The `define` function creates these.
  * 3. One anonymous AMD module with the key `undefined`. These are always temporary and are expected
  *    to be claimed and named by a `load` call (through `resolveModule`) within the same task.
- * 4. If the esquirejs option `cacheESModules` is set: ECMAScript modules, cached by their load name.
+ * 4. If the EsquireJS option `cacheESModules` is set: ECMAScript modules, cached by their load name.
  *
  * Thus, during runtime the provisionsMap might look something like as follows:
  * Map {
@@ -27,8 +27,8 @@ const provisionsMap = new Map<undefined | string, unknown>();
  * `import("module")` functionality.
  *
  * As an example, if a web application has a dynamic dependency on D3 and an AMD module
- * loaded through esquirejs might also depend on D3, then a function to initialize the
- * Webpack dynamic loading of D3 can be provided to esquirejs using
+ * loaded through EsquireJS might also depend on D3, then a function to initialize the
+ * Webpack dynamic loading of D3 can be provided to EsquireJS using
  * `provideAsync("d3", () => import("d3"))`.
  *
  * The map is also used by the `define` function when either defined module building is set to
@@ -49,10 +49,8 @@ const asyncProvisionsMap = new Map<
     () => Promise<unknown>
 >();
 
-const handledPromises = new WeakSet<Promise<unknown>>();
-
 /**
- * Provide a module to esquirejs
+ * Provide a module to EsquireJS
  * @param name Name of module (used by eg. AMD modules)
  * @param payload Module
  */
@@ -68,7 +66,7 @@ export const provideAnonymousModule = (payload: unknown): void => {
 };
 
 /**
- * Provide an asynchronously loadable module to esquirejs
+ * Provide an asynchronously loadable module to EsquireJS
  * @param name Name of module (used by eg. AMD modules)
  * @param payload Zero-parameter function that returns a Promise of the module
  */
@@ -94,6 +92,7 @@ export const hasSyncModule = (name: string): boolean => provisionsMap.has(name);
 export const hasAnonymousModule = (): boolean =>
     provisionsMap.has(undefined) || asyncProvisionsMap.has(undefined);
 
+const internalLoadPromises = new WeakSet<Promise<unknown>>();
 export const getModule = (name: string): unknown | Promise<unknown> => {
     if (provisionsMap.has(name)) {
         return provisionsMap.get(name)!;
@@ -102,15 +101,15 @@ export const getModule = (name: string): unknown | Promise<unknown> => {
     // function to generate the promise, and then push that generated promise
     // back into the asyncProvisionMap to make sure we do not duplicate the module.
     let modulePromise = asyncProvisionsMap.get(name)!();
-    if (!handledPromises.has(modulePromise)) {
+    if (!internalLoadPromises.has(modulePromise)) {
         modulePromise = modulePromise.then(moduleData => {
             asyncProvisionsMap.delete(name);
-            handledPromises.delete(modulePromise);
+            internalLoadPromises.delete(modulePromise);
             provide(name, moduleData);
             return moduleData;
         });
         asyncProvisionsMap.set(name, () => modulePromise);
-        handledPromises.add(modulePromise);
+        internalLoadPromises.add(modulePromise);
     }
     return modulePromise;
 };

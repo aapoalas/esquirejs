@@ -30,7 +30,7 @@ type ErrorCallback = (error: Error) => void;
 const ERROR_CALLBACKS = new Set<ErrorCallback>();
 
 /**
- * Register an error callback listener to esquirejs. If an error happens during
+ * Register an error callback listener to EsquireJS. If an error happens during
  * a dynamic import, the error callback will be called with the error object.
  * If no error listeners are registered, errors will be left uncaught.
  *
@@ -198,7 +198,7 @@ const loadFromPlugin = (moduleName: string): unknown | Promise<unknown> => {
     const frozenOptions = Object.freeze(Object.assign({}, importJSOptions));
     if (typeof prefix === "string" && !hasPluginByName(prefix)) {
         if (!hasModule(prefix)) {
-            throw new Error(`Unknown esquirejs plugin '${prefix}'`);
+            throw new Error(`Unknown EsquireJS plugin '${prefix}'`);
         }
         // A plugin has been provided asynchronously, load and define it
         // before starting the module load
@@ -216,6 +216,8 @@ const loadFromPlugin = (moduleName: string): unknown | Promise<unknown> => {
     return getPluginByName(prefix)!.load(name, loadFromPlugin, frozenOptions);
 };
 
+const loadsInProgress = new Map<string, Promise<unknown>>();
+
 /**
  * Function to require component modules and functions from UI Runtime Service.
  * Non-JavaScript modules are fetched and either parsed to JSON for JSON files,
@@ -231,10 +233,19 @@ export const load = async (
     try {
         if (hasModule(moduleName)) {
             return getModule(moduleName);
+        } else if (loadsInProgress.has(moduleName)) {
+            return loadsInProgress.get(moduleName);
         }
 
-        const resource = await loadFromPlugin(moduleName);
-        return resolveModule(moduleName, resource, options);
+        const loadResult = loadFromPlugin(moduleName);
+        if (loadResult instanceof Promise) {
+            const inProgressPromise = loadResult
+                .then(resource => resolveModule(moduleName, resource, options))
+                .finally(() => loadsInProgress.delete(moduleName));
+            loadsInProgress.set(moduleName, inProgressPromise);
+            return inProgressPromise;
+        }
+        return resolveModule(moduleName, loadResult, options);
     } catch (err) {
         if (ERROR_CALLBACKS.size === 0) {
             throw err;
@@ -244,26 +255,18 @@ export const load = async (
     }
 };
 
-// const normalizeIfNeeded = (name: string, parentName: string) => {
-//     const baseName: string = name.split(importJSOptions.separator).pop()!;
-//     if (!baseName.startsWith("./") && !baseName.startsWith("../")) {
-//         return name;
-//     }
-
-//     const [prefix, nameToNormalize] = decomposeModuleName(name);
-//     if (typeof prefix === "string" && !hasPluginByName(prefix)) {
-//         throw new Error(`Unknown esquirejs plugin ${prefix}`);
-//     }
-
-//     // Found corresponding plugin
-//     const plugin = getPluginByName(prefix)!;
-//     if (typeof plugin.normalize === "function") {
-//         return plugin.normalize(nameToNormalize, (deepName: string) =>
-//             normalizeIfNeeded(deepName, parentName)
-//         );
-//     }
-// };
-
+/**
+ * Function to require synchronously provided or previously loaded
+ * modules from ESquireJS's cache. If a module is not found, the
+ * function throws an error.
+ * 
+ * The function's behaviour is similar to RequireJS's `require("module")`
+ * API without the possibility to use an array of module names to
+ * asynchronously require modules.
+ * 
+ * @param name Name of module to require from cache
+ * @param options Optional options for the require
+ */
 export const directRequire = (
     name: string,
     options: LoadFunctionOptions = importJSOptions
@@ -282,4 +285,54 @@ export const directRequire = (
         return module;
     }
     throw new Error(`No library by name of '${name}' found.`);
+};
+
+/**
+ * Function to require modules in cache synchronously or load more
+ * asynchronously using a callback or from a returned Promise.
+ * 
+ * The function's behaviour is similar to RequireJS's `require(...args)`
+ * in that it can be used to synchronously require modules or to
+ * asynchronously fetch more modules with the module names given in
+ * an array. The only difference is that in RequireJS the form
+ * `require(["module1", "module2"])` would return a new require
+ * function with the two given modules bound into its callback.
+ * In ESquireJS this form returns a Promise for an array containing
+ * the two requested modules.
+ * 
+ * @param depNames Name of module to require from cache, or an array of
+ * module names to fetch
+ * @param callback Optional callback, only used when first parameter is
+ * an array of module names. The callback is called once all the modules
+ * have been fetched.
+ */
+export function legacyRequire(moduleName: string): unknown;
+export function legacyRequire(depNames: string[]): Promise<unknown[]>;
+export function legacyRequire(depNames: string[], callback: (...dependencies: unknown[]) => void): void;
+export function legacyRequire(
+    depNames: string | string[],
+    callback?: (...dependencies: unknown[]) => void
+) {
+    if (typeof depNames === "string") {
+        return directRequire(depNames, {
+            returnDefaultExport: importJSOptions.amdReturnDefaultExport
+        });
+    } else if (
+        !Array.isArray(depNames) ||
+        depNames.some(dep => typeof dep !== "string")
+    ) {
+        throw new TypeError("Invalid require parameters");
+    }
+
+    const dependencies = Promise.all(
+        depNames.map(dep =>
+            load(dep, {
+                returnDefaultExport: importJSOptions.amdReturnDefaultExport
+            })
+        )
+    );
+    if (callback === undefined) {
+        return dependencies;
+    }
+    dependencies.then((loadedDeps: unknown[]) => callback(...loadedDeps));
 };

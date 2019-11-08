@@ -5,6 +5,8 @@
 import { ImportJSOptions } from "../options";
 import { LoadFunction } from "../plugins";
 
+let fetchOptions: undefined | RequestInit;
+
 export const load = async (
     url: string,
     loadAsync: LoadFunction,
@@ -22,7 +24,7 @@ export const load = async (
             }${url.substring(lastSeparatorIndex + 1)}`
         );
     }
-    const response = await fetch(url);
+    const response = await fetch(url, fetchOptions);
     const contentType = response.headers.get("Content-Type");
     if (
         typeof contentType !== "string" ||
@@ -33,4 +35,8 @@ export const load = async (
         );
     }
     return response.json();
+};
+
+export const setOptions = (options: RequestInit) => {
+    fetchOptions = options;
 };

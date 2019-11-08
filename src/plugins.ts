@@ -3,12 +3,8 @@
  */
 
 import { ImportJSOptions } from "./options";
-import * as basePlugin from "./plugins/scriptBase";
-import * as json from "./plugins/json";
-import * as text from "./plugins/text";
 
 export interface LoadFunctionOptions {
-    readonly baseUrl?: string;
     readonly returnDefaultExport?: boolean;
 }
 
@@ -20,23 +16,23 @@ export interface Plugin {
         load: LoadFunction,
         options: Readonly<ImportJSOptions>
     ) => unknown | Promise<unknown>;
-    normalize?: (
-        moduleName: string,
-        normalize: (moduleName: string) => string
-    ) => string;
 }
 
-const plugins = new Map<string | undefined, Plugin>([
-    [undefined, basePlugin],
-    ["json", json],
-    ["text", text],
-]);
+const plugins = new Map<string | undefined, Plugin>();
 
 export const hasPluginByName = (pluginName: string) => plugins.has(pluginName);
 
 export const getPluginByName = (pluginName: undefined | string) =>
     plugins.get(pluginName);
 
+export const defineBasePlugin = (basePlugin: Plugin) => {
+    if (plugins.has(undefined)) {
+        // Throw an error for redefining base plugin.
+        throw new Error("Base plugin has already been defined");
+    }
+    plugins.set(undefined, basePlugin);
+}
+    
 export const definePlugin = (pluginName: string, plugin: Plugin) => {
     if (hasPluginByName(pluginName)) {
         // Throw an error for redefining plugins in an attempt to make sure

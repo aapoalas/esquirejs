@@ -5,6 +5,8 @@
 import { ImportJSOptions } from "../options";
 import { LoadFunction } from "../plugins";
 
+type CORS = undefined | "anonymous" | "use-credentials" | "";
+
 const isJSONURL = (url: string): boolean => url.endsWith(".json");
 
 const isHTMLTextURL = (url: string): boolean =>
@@ -12,6 +14,8 @@ const isHTMLTextURL = (url: string): boolean =>
 
 const HEAD_EL = document.getElementsByTagName("head")[0];
 const LISTENER_OPTIONS = { once: true };
+
+let crossOrigin: CORS = "anonymous";
 
 export const load = async (
     url: string,
@@ -25,7 +29,7 @@ export const load = async (
     }
     return new Promise((res, rej) => {
         const script = document.createElement("script");
-        script.crossOrigin = "anonymous"; // Should come from a setting
+        script.crossOrigin = crossOrigin;
         script.src = url;
         script.type = "module";
         const onload = () => {
@@ -41,3 +45,7 @@ export const load = async (
         HEAD_EL.append(script);
     });
 };
+
+export const setOptions = ({ crossOrigin: CORS }: { crossOrigin: CORS }) => {
+    crossOrigin = CORS;
+}

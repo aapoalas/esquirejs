@@ -129,17 +129,17 @@ const isModuleFactory = (
 ): d is DefineModuleFactory => typeof d === "function";
 
 export function define(
-    moduleData: DefineModuleData | DefineModuleFactory
-): void;
-export function define(name: string, moduleData: DefineModuleData): void;
-export function define(
-    arg0: string | DefineDependencyNames,
-    moduleFactory: DefineModuleFactory
-): void;
-export function define(
     name: string,
     depNames: DefineDependencyNames,
     moduleFactory: DefineModuleFactory
+): void;
+export function define(
+    arg0: string | DefineDependencyNames,
+    moduleFactory: DefineModuleFactory
+    ): void;
+export function define(name: string, moduleData: DefineModuleData): void;
+export function define(
+    moduleData: DefineModuleData | DefineModuleFactory
 ): void;
 export function define(...params: any[]) {
     let name: undefined | string;
