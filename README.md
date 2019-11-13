@@ -92,6 +92,8 @@ provideAsync("d3", () => import("d3"));
 
 If this is built by Webpack, the `import("d3")` will be changed to a dynamic Webpack import. EsquireJS will keep this module load function in its asynchronous cache and if some module requests **d3** then the function will be executed and the result saved into the EsquireJS synchronous cache.
 
+* **Undefine**: The `undefine` API can be used to remove a module from EsquireJS module cache. After a module has been removed it can be re-provided or re-defined by the above APIs. Removing a module from cache does not remove it from existing, built AMD modules that depend on it.
+
 ### Missing features compared to RequireJS
 EsquireJS is not a complete drop-in replace for RequireJS. Most of the advanced features of RequireJS (and even a few of the basic ones) are missing at present.
 
