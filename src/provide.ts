@@ -55,13 +55,13 @@ const asyncProvisionsMap = new Map<
  * @param payload Module
  */
 export const provide = (name: string, payload: unknown): void => {
+    if (provisionsMap.has(name) || asyncProvisionsMap.has(name)) {
+        throw new Error(`Module ${name} is already provided`);
+    }
     provisionsMap.set(name, payload);
 };
 
 export const provideAnonymousModule = (payload: unknown): void => {
-    if (provisionsMap.has(undefined)) {
-        console.log("Anonymous module overwrite");
-    }
     provisionsMap.set(undefined, payload);
 };
 
@@ -74,15 +74,15 @@ export const provideAsync = (
     name: string,
     payload: () => Promise<unknown>
 ): void => {
+    if (provisionsMap.has(name) || asyncProvisionsMap.has(name)) {
+        throw new Error(`Module ${name} is already provided`);
+    }
     asyncProvisionsMap.set(name, payload);
 };
 
 export const provideAnonymousModuleAsync = (
     payload: () => Promise<unknown>
 ): void => {
-    if (asyncProvisionsMap.has(undefined)) {
-        console.log("Anonymous async module overwrite");
-    }
     asyncProvisionsMap.set(undefined, payload);
 };
 
@@ -123,5 +123,14 @@ export const renameModule = (newName: string, previousName?: string): void => {
         const moduleData = asyncProvisionsMap.get(previousName)!;
         asyncProvisionsMap.delete(previousName);
         provideAsync(newName, moduleData);
+    }
+};
+
+export const undefine = (name: string) => {
+    if (provisionsMap.has(name)) {
+        provisionsMap.delete(name);
+    }
+    if (asyncProvisionsMap.has(name)) {
+        asyncProvisionsMap.delete(name);
     }
 };

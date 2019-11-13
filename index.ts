@@ -16,7 +16,7 @@ export {
 } from "./src/load";
 export { getOptions, setOptions } from "./src/options";
 export { defineBasePlugin, definePlugin } from "./src/plugins";
-export { provide, provideAsync } from "./src/provide";
+export { provide, provideAsync, undefine } from "./src/provide";
 
 export const plugins = {
     base,

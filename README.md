@@ -96,7 +96,6 @@ If this is built by Webpack, the `import("d3")` will be changed to a dynamic Web
 EsquireJS is not a complete drop-in replace for RequireJS. Most of the advanced features of RequireJS (and even a few of the basic ones) are missing at present.
 
 * **Base URL**: RequireJS offers support to change the base URL from which all requests are made from. This is not yet supported in EsquireJS but is considered high priority.
-* **Undef**: RequireJS offers support for module undefining. This is not yet supported in EsquireJS but is considered medium priority (and low effort).
 * **Timeout**: RequireJS offers support for automatic load timeouts. This is not yet supported in EsquireJS but is considered medium priority.
 * **Relative AMD imports**: RequireJS can calculate and normalize paths from AMD modules to relative imports. Since this is natively supported with ES modules, this is not a high priority for EsquireJS.
 * **Paths and shim configuration**: RequireJS offers a method to configure module paths and shims. These sort of imports are generally better left for bundlers such as Rollup or Webpack. They can also be defined in user-land with the `provideAsync` API. As such, this is not a high priority for EsquireJS.
