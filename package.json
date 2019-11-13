@@ -29,7 +29,6 @@
     "test": "echo TODO"
   },
   "prepublish": "tsc",
-  "private": true,
   "sideEffects": false,
   "devDependencies": {
     "@types/tape": "4.2.33",
