@@ -1,6 +1,6 @@
 {
   "name": "esquirejs",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "An ECMAScript file and module loader for the modern period.",
   "keywords": [
     "esm",
