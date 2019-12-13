@@ -1,6 +1,6 @@
 {
   "name": "esquirejs",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "An ECMAScript file and module loader for the modern period.",
   "keywords": [
     "esm",
@@ -18,7 +18,7 @@
     "email": "aapo.alasuutari@valmet.com",
     "url": "https://github.com/aapoalas"
   },
-  "main": "dist/index.js",
+  "browser": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
