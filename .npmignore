@@ -2,3 +2,4 @@ src
 esquirejs.ts
 index.ts
 tsconfig.json
+test/dist

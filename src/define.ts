@@ -107,8 +107,8 @@ const resolveDependencies = (depNames: string[], exports?: {}) =>
             return moduleRequireFunction;
         } else if (dep === MODULE_DEPENDENCY) {
             return {
-                id: name,
-                uri: name,
+                id: "",
+                uri: "",
                 config: {},
                 exports,
             };
@@ -210,7 +210,6 @@ export function define(...params: any[]) {
     // not overwrite a module that hasn't been unreferenced.
     const isNamed = typeof name === "string";
     const isNamedNewAMDModule = isNamed && !hasModule(name!);
-    const isRedefinedAMDModule = isNamed && hasModule(name!);
 
     let defineAsync: boolean = importJSOptions.deferDefineLoads;
     if (depNames !== undefined && moduleFactory !== undefined) {
@@ -240,18 +239,20 @@ export function define(...params: any[]) {
             // will be set to be invoked on the next tick and the result saved
             // as an asynchronous module definition.
 
-            moduleData = () =>
-                Promise.all(resolveDependencies(depNames!, moduleData)).then(
+            const boundModuleData = moduleData;
+            const moduleBuilderFunction = () =>
+                Promise.all(resolveDependencies(depNames!, boundModuleData)).then(
                     deps => {
                         const returnValue = moduleFactory!(...deps);
-                        return usesExports ? moduleData : returnValue;
+                        return usesExports ? boundModuleData : returnValue;
                     }
                 );
             if (shouldBuildDelayed) {
-                const moduleDataPromise = Promise.resolve().then(() =>
-                    moduleData()
+                moduleData = () => Promise.resolve().then(() =>
+                    moduleBuilderFunction()
                 );
-                moduleData = () => moduleDataPromise;
+            } else {
+                moduleData = moduleBuilderFunction;
             }
             // The 'moduleData' is here by necessity a function and such a function
             // that it will never leak out of this library. As such, it is safe for us

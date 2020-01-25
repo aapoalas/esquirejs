@@ -25,13 +25,17 @@
     "url": "https://github.com/aapoalas/esquirejs.git"
   },
   "scripts": {
-    "build-test": "echo TODO",
-    "test": "echo TODO"
+    "build": "tsc",
+    "build-test": "tsc --project tsconfig.test.json",
+    "test": "tape test/**/*.test.js",
+    "watch": "tsc --watch",
+    "watch-test": "tsc --watch --project tsconfig.test.json"
   },
   "prepublish": "tsc",
   "sideEffects": false,
   "devDependencies": {
     "@types/tape": "4.2.33",
+    "browserify": "16.5.0",
     "tape": "4.11.0",
     "typescript": "3.7.2"
   }

@@ -1,16 +1,20 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "target": "esnext",
-    "module": "esnext",
+    "module": "commonjs",
     "declaration": true,
-    "outDir": "./dist",
+    "outDir": "test/dist",
     "strict": true,
     "forceConsistentCasingInFileNames": true
   },
   "exclude": [
     "node_modules",
     "dist",
-    "test",
-    "test-dist",
+    "test/dist"
+  ],
+  "include": [
+    "test/globals.d.ts",
+    "test/**/*.ts"
   ]
 }
