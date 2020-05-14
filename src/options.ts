@@ -17,7 +17,7 @@ const PLUGIN_NAME_SEPARATOR = "!" as const;
 
 export const importJSOptions: ImportJSOptions = {
     amdReturnDefaultExport: true,
-    baseUrl: window.location.href,
+    baseUrl: import.meta.url,
     cacheESModules: false,
     deferDefineLoads: true,
     returnDefaultExport: true,

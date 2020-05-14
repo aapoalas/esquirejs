@@ -255,7 +255,7 @@ This does not affect what gets saved into the module cache when `cacheESModules`
 
 ### UNSUPPORTED: baseUrl
 * Type: `string`
-* Default: `window.location.href`
+* Default: `import.meta.url`
 
 Base URL for all loads. Not yet supported.
 
