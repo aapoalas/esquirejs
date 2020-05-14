@@ -6,7 +6,7 @@ import * as base from "./src/plugins/base.ts";
 import * as json from "./src/plugins/json.ts";
 import * as text from "./src/plugins/text.ts";
 
-export { define } from "./src/define";
+export { define } from "./src/define.ts";
 export {
     directRequire,
     legacyRequire,
