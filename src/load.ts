@@ -2,13 +2,13 @@
  * Original Work Copyright 2019 Valmet Automation Inc.
  */
 
-import { importJSOptions } from "./options";
+import { importJSOptions } from "./options.ts";
 import {
     definePlugin,
     getPluginByName,
     hasPluginByName,
     LoadFunctionOptions,
-} from "./plugins";
+} from "./plugins.ts";
 import {
     getModule,
     hasAnonymousModule,
