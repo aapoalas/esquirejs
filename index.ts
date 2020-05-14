@@ -13,9 +13,9 @@ export {
     load,
     registerErrorListener
 } from "./src/load";
-export { getOptions, setOptions } from "./src/options";
-export { defineBasePlugin, definePlugin } from "./src/plugins";
-export { provide, provideAsync, undefine } from "./src/provide";
+export { getOptions, setOptions } from "./src/options.ts";
+export { defineBasePlugin, definePlugin } from "./src/plugins.ts";
+export { provide, provideAsync, undefine } from "./src/provide.ts";
 
 export const plugins = {
     base,
