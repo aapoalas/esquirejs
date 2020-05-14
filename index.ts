@@ -12,7 +12,7 @@ export {
     legacyRequire,
     load,
     registerErrorListener
-} from "./src/load";
+} from "./src/load.ts";
 export { getOptions, setOptions } from "./src/options.ts";
 export { defineBasePlugin, definePlugin } from "./src/plugins.ts";
 export { provide, provideAsync, undefine } from "./src/provide.ts";
