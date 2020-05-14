@@ -1,4 +1,4 @@
-import { define } from "../src/define";
+import { define } from "../src/define.ts";
 
 declare global {
     interface Window {

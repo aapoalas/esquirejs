@@ -3,7 +3,7 @@
  */
 
 import * as tape from "tape";
-import { define, load, setOptions } from "../../index";
+import { define, load, setOptions } from "../../index.ts";
 
 tape("Define function", ({ test }) => {
     test("Anonymous define with no parameters", t => {
