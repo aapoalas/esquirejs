@@ -2,7 +2,7 @@
  * Original Work Copyright 2019 Valmet Automation Inc.
  */
 
-import { ImportJSOptions } from "./options";
+import { ImportJSOptions } from "./options.ts";
 
 export interface LoadFunctionOptions {
     readonly returnDefaultExport?: boolean;

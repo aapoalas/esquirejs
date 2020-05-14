@@ -2,8 +2,8 @@
  * Original Work Copyright 2019 Valmet Automation Inc.
  */
 
-import { ImportJSOptions } from "../options";
-import { LoadFunction } from "../plugins";
+import { ImportJSOptions } from "../options.ts";
+import { LoadFunction } from "../plugins.ts";
 
 const isJSONURL = (url: string): boolean => url.endsWith(".json");
 

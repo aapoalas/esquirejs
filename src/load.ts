@@ -17,7 +17,7 @@ import {
     renameModule,
     hasSyncModule,
     provideAsync,
-} from "./provide";
+} from "./provide.ts";
 
 /**
  * ERROR_CALLBACKS is a set to contain error callback functions for the dynamic importer.

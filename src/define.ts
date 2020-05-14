@@ -7,8 +7,8 @@ import {
     load,
     recentlyDefinedModules,
     recentlyRedefinedModules,
-} from "./load";
-import { importJSOptions } from "./options";
+} from "./load.ts";
+import { importJSOptions } from "./options.ts";
 import {
     hasModule,
     hasSyncModule,
@@ -16,7 +16,7 @@ import {
     provideAnonymousModule,
     provideAnonymousModuleAsync,
     provideAsync,
-} from "./provide";
+} from "./provide.ts";
 
 type DefineDependencyNames = string[];
 type DefineModuleFactory = (...dependencies: any[]) => any;

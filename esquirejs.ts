@@ -14,14 +14,14 @@
  * or others.
  */
 
-import * as json from "./src/plugins/json";
-import * as scriptBase from "./src/plugins/scriptBase";
-import * as text from "./src/plugins/text";
-import { define } from "./src/define";
+import * as json from "./src/plugins/json.ts";
+import * as base from "./src/plugins/base.ts";
+import * as text from "./src/plugins/text.ts";
+import { define } from "./src/define.ts";
 import {
   legacyRequire,
-} from "./src/load";
-import { defineBasePlugin, definePlugin } from "./src/plugins";
+} from "./src/load.ts";
+import { defineBasePlugin, definePlugin } from "./src/plugins.ts";
 
 declare global {
     interface Window {
@@ -33,7 +33,7 @@ declare global {
 export const setup = () => {
   // Define base plugin and the json! and text! plugins
   // that it indirectly depends on.
-  defineBasePlugin(scriptBase);
+  defineBasePlugin(base);
   definePlugin("json", json);
   definePlugin("text", text);
   

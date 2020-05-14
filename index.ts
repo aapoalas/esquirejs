@@ -2,10 +2,9 @@
  * Original Work Copyright 2019 Valmet Automation Inc.
  */
 
-import * as base from "./src/plugins/base";
-import * as json from "./src/plugins/json";
-import * as scriptBase from "./src/plugins/scriptBase";
-import * as text from "./src/plugins/text";
+import * as base from "./src/plugins/base.ts";
+import * as json from "./src/plugins/json.ts";
+import * as text from "./src/plugins/text.ts";
 
 export { define } from "./src/define";
 export {
@@ -21,6 +20,5 @@ export { provide, provideAsync, undefine } from "./src/provide";
 export const plugins = {
     base,
     json,
-    scriptBase,
     text
 };
