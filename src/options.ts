@@ -17,7 +17,7 @@ const PLUGIN_NAME_SEPARATOR = "!" as const;
 
 export const importJSOptions: ImportJSOptions = {
     amdReturnDefaultExport: true,
-    baseUrl: import.meta.url,
+    baseUrl: Deno.cwd(),
     cacheESModules: false,
     deferDefineLoads: true,
     returnDefaultExport: true,

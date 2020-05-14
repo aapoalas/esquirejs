@@ -4,6 +4,7 @@
 
 import { ImportJSOptions } from "../options.ts";
 import { LoadFunction } from "../plugins.ts";
+import { isAbsolute, resolve } from "https://deno.land/std/path/mod.ts";
 
 const isJSONURL = (url: string): boolean => url.endsWith(".json");
 
@@ -20,5 +21,5 @@ export const load = async (
     } else if (isHTMLTextURL(url)) {
         return loadAsync(`text${options.separator}${url}`);
     }
-    return import(/* webpackIgnore: true */ url);
+    return import(isAbsolute(url) ? url : resolve(options.baseUrl, url));
 };
