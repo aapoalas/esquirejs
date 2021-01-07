@@ -94,9 +94,9 @@ const moduleRequireFunction = (
     const shouldDelayProcessing = shouldModuleLoadBeDelayed(depNames);
     shouldDelayProcessing
         ? Promise.resolve()
-              .then(() => resolveDependencies(depNames, {}))
-              .then(loadedDeps => callback(loadedDeps))
-        : callback(resolveDependencies(depNames, {}));
+              .then(() => Promise.all(resolveDependencies(depNames, {})))
+              .then(loadedDeps => callback(...loadedDeps))
+        : callback(...resolveDependencies(depNames, {}));
 };
 
 const resolveDependencies = (depNames: string[], exports?: {}) =>
